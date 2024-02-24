@@ -10,7 +10,7 @@
            "Lots of Insidious, Silly Parentheses", 
            "Lost In a Sea of Parentheses"
 
-- Homoiconic; i.e., shared representation for code & data
+- Homoiconic; i.e., shared representation for code & data  [A single representation]
 
 - Supports (but does not enforce) functional style
 
@@ -18,7 +18,7 @@
   - Higher-order functions
   - Anonymous functions
 
-- Dynamically and Strongly typed
+- Dynamically and Strongly typed [the types you declare are strongly enforced] [dynamic: 
 
   - Sister language "Typed Racket" is statically typed
 
@@ -26,15 +26,15 @@
 
 - Lexically scoped
 
-- Heap-based storage with garbage collection
+- Heap-based storage with garbage collection  [heap:dynamic memory allocation] 
 -----------------------------------------------------------------------------|#
 
 ;; a bit of Racket to whet your appetite
 (define (quicksort < l)
-  (match l
-    ['() '()]
+  (match l   ;pattern matching 
+    ['() '()] 
     [(cons x xs) 
-     (let-values ([(xs-gte xs-lt) (partition (curry < x) xs)])
+     (let-values ([(xs-gte xs-lt) (partition (curry < x) xs)]) ;elements grater than x and less than x 
        (append (quicksort < xs-lt) 
                (list x) 
                (quicksort < xs-gte)))]))
@@ -45,7 +45,7 @@
 
 The essential syntactic unit of Racket is the *S-expression*, or sexp.
 
-A sexp is either an *atom* or a *list*.
+A sexp is either an *atom* or a *list*. 
 
 - An atom is one of:
 
@@ -71,6 +71,21 @@ A sexp is either an *atom* or a *list*.
 ;; Note: `#;` is a convenient, special "sexp comment"
 
 
+42
+
+1/3
+
+#; foo ;unbound identifier, gives an error
+
+; #; comments out a single sexp expression
+
+#; (define foo 10)
+
+#;
+(define (say-hi name)
+  print(name))
+
+( 1 2 3 4 5)
 
 #|-----------------------------------------------------------------------------
 ;; Evaluating sexps
@@ -84,7 +99,9 @@ A sexp is either an *atom* or a *list*.
 - For lists, if the first element evaluates to a *function*, that function is
   applied to the rest of the values in the list
 
-  - e.g., `(f x y z)` applies function `f` to the values `x`, `y`, and `z`
+  - e.g., `(f x y z)` applies function `f` to the values `x`, `y`, and `z` [If it is bound to the function apply it to the rest]
+  
+  [Function call : List with function in first position and argument later]
 
   - Arguments are passed *by value*; i.e., the argument sexps are evaluated 
     first, then their results are passed to the function
@@ -93,9 +110,9 @@ A sexp is either an *atom* or a *list*.
   like a function to its arguments, but with special semantics
 -----------------------------------------------------------------------------|#
 
-;; try evaluating some sexps
+;; try evaluating some sexps 
 
-
+; (if (> 5 2) (print "5 is greater") (print "2 is greater"))
 
 #|-----------------------------------------------------------------------------
 ;; Quoting
@@ -114,12 +131,12 @@ There is also another special form, `quasiquote`, which can be used with
   (quasiquote x) == `x
   (quasiquote (x (unquote y) z)) == `(x ,y z)
 
-Quasiquoting is particularly useful for metaprogramming!
+Quasiquoting is particularly useful for metaprogramming! [back tick]
 -----------------------------------------------------------------------------|#
 
 ;; try evaluating some quote/quasiquote/unquote-based forms
 
-
+; does not evaluate it (quote 42) 
 
 #|-----------------------------------------------------------------------------
 ;; Variables
@@ -131,7 +148,7 @@ Define global variables with `define` and local variables with `let` and `let*`
 
 (define bignum (expt 2 50))
 
-;; introducing local vars
+;; introducing local vars  ; bind local variables to values 
 (define cnum (let ([x 10]
                    [y 44])
                (* x y)))
@@ -186,6 +203,8 @@ Useful functions:
 (define pair3 '(1 . 2)) ; `.` indicates that the next value is the cdr of a pair
 
 (define pair4 '(3 1 . 2)) ; = (cons 3 (cons 1 2))
+
+;list of 1 2 3 (cons 1(cons 2(cons 3 empty))) 
 
 
 ;; build and take apart some lists
